@@ -41,5 +41,9 @@ app.include_router(admin.router,   prefix="/admin",       tags=["Admin"])
 
 
 @app.get("/")
-async def root():
-    return {"message": "BGS.GG API is running", "docs": "/docs"}
+async def root(request: Request):
+    return templates.TemplateResponse("Index.html", {"request": request})
+
+@app.get("/pets")
+async def pets_page(request: Request):
+    return templates.TemplateResponse("Pets.html", {"request": request})
