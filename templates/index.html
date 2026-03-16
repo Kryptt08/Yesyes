@@ -295,15 +295,15 @@
 
   <!-- NAV -->
   <nav>
-    <a href="index.html" class="nav-logo">
+    <a href="/" class="nav-logo">
       <span class="logo-bubble"></span>
       <span>BGS.GG</span>
     </a>
     <div class="nav-links">
-      <a href="index.html" class="active">
+      <a href="/" class="active">
         <span>Home</span>
       </a>
-      <a href="pets.html">
+      <a href="/pets">
         <span>Pets</span>
       </a>
       <a href="#" class="nav-discord">
@@ -324,7 +324,7 @@
       </h1>
       <p>Your go-to resource for accurate, community-driven pet values. Trade smarter, collect rarer.</p>
       <div class="hero-ctas">
-        <a href="pets.html" class="btn btn-primary">See All Values</a>
+        <a href="/pets" class="btn btn-primary">See All Values</a>
         <a href="#" class="btn btn-secondary">Join Discord</a>
       </div>
     </div>
@@ -354,7 +354,7 @@
   <div class="section">
     <div class="section-header">
       <div class="section-title"><div class="dot"></div>Top Valued Pets</div>
-      <a href="pets.html" class="see-all">See all pets →</a>
+      <a href="/pets" class="see-all">See all pets →</a>
     </div>
     <div class="pets-grid" id="topGrid">
       <div style="color:var(--muted);font-size:0.875rem;padding:20px;">Loading...</div>
@@ -365,7 +365,7 @@
   <div class="section">
     <div class="section-header">
       <div class="section-title"><div class="dot"></div>Secret Pets</div>
-      <a href="pets.html" class="see-all">See all →</a>
+      <a href="/pets" class="see-all">See all →</a>
     </div>
     <div class="pets-grid" id="secretGrid">
       <div style="color:var(--muted);font-size:0.875rem;padding:20px;">Loading...</div>
@@ -391,7 +391,7 @@
       const initials = p.name.split(' ').map(w => w[0]).join('');
       const phClass  = 'ph-' + p.rarity.toLowerCase();
       return `
-        <a class="pet-card" href="pets.html">
+        <a class="pet-card" href="/pets">
           <div class="pet-img-wrap">
             <div class="pet-img-placeholder ${phClass}">${initials}</div>
           </div>
