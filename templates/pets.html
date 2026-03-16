@@ -310,8 +310,14 @@
       return '';
     }
     function formatValue(v) {
-      if (v >= 1000) return v.toLocaleString() + '%';
-      return v + '%';
+      if (!v || v === 'null' || v === '0') return '0';
+      const upper = v.toString().toUpperCase().trim();
+      if (upper === 'N/A') return 'N/A';
+      if (upper === 'O/C') return 'O/C';
+      const num = parseFloat(v);
+      if (isNaN(num)) return v;
+      if (num >= 1000) return num.toLocaleString();
+      return num.toString();
     }
 
     function setFilter(rarity, btn) {
@@ -356,7 +362,10 @@
       grid.innerHTML = filtered.map(p => `
         <div class="pet-card ${cardRarityClass(p.rarity)}">
           <div class="pet-img-wrap">
-            <div class="pet-img-placeholder ph-${p.rarity.toLowerCase()}">${p.name.split(' ').map(w => w[0]).join('')}</div>
+            ${p.image_url
+              ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'pet-img-placeholder ph-${p.rarity.toLowerCase()}\\'>${p.name.split(' ').map(w=>w[0]).join('')}</div>'">`
+              : `<div class="pet-img-placeholder ph-${p.rarity.toLowerCase()}">${p.name.split(' ').map(w => w[0]).join('')}</div>`
+            }
           </div>
           <div class="pet-name">${p.name}</div>
           <span class="rarity-tag ${rarityClass(p.rarity)}">${p.rarity}</span>

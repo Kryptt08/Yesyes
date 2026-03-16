@@ -387,17 +387,29 @@
       return 'r-rare';
     }
 
+    function formatValue(v) {
+      if (!v || v === 'null' || v === '0') return '0';
+      const upper = v.toString().toUpperCase().trim();
+      if (upper === 'N/A') return 'N/A';
+      if (upper === 'O/C') return 'O/C';
+      const num = parseFloat(v);
+      if (isNaN(num)) return v;
+      if (num >= 1000) return num.toLocaleString();
+      return num.toString();
+    }
+
     function petCard(p) {
       const initials = p.name.split(' ').map(w => w[0]).join('');
       const phClass  = 'ph-' + p.rarity.toLowerCase();
+      const imgHtml  = p.image_url
+        ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'pet-img-placeholder ${phClass}\\'>${initials}</div>'">`
+        : `<div class="pet-img-placeholder ${phClass}">${initials}</div>`;
       return `
         <a class="pet-card" href="/pets">
-          <div class="pet-img-wrap">
-            <div class="pet-img-placeholder ${phClass}">${initials}</div>
-          </div>
+          <div class="pet-img-wrap">${imgHtml}</div>
           <div class="pet-name">${p.name}</div>
           <span class="rarity-tag ${rarityClass(p.rarity)}">${p.rarity}</span>
-          <div class="pet-value">${p.value}%</div>
+          <div class="pet-value">${formatValue(p.value)}</div>
           <div class="pet-value-label">Trade Value</div>
         </a>`;
     }

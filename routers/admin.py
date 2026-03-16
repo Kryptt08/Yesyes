@@ -92,10 +92,10 @@ async def add_pet(pet: PetCreate, user: str = Depends(require_admin)):
     try:
         conn.execute(
             """
-            INSERT INTO pets (name, rarity, value, shiny_value, note)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO pets (name, rarity, value, shiny_value, image_url, note)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (pet.name, pet.rarity, pet.value, pet.shiny_value, pet.note),
+            (pet.name, pet.rarity, pet.value, pet.shiny_value, pet.image_url, pet.note),
         )
         conn.commit()
     except Exception as e:
@@ -144,10 +144,10 @@ async def update_pet_value(
     conn.execute(
         """
         UPDATE pets
-        SET value = ?, shiny_value = ?, note = ?, updated_at = datetime('now')
+        SET value = ?, shiny_value = ?, image_url = ?, note = ?, updated_at = datetime('now')
         WHERE id = ?
         """,
-        (update.value, update.shiny_value, update.note, pet_id),
+        (update.value, update.shiny_value, update.image_url, update.note, pet_id),
     )
     conn.commit()
     conn.close()
