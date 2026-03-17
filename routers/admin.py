@@ -73,7 +73,18 @@ async def logout(request: Request):
 @router.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request, user: str = Depends(require_admin)):
     conn = get_conn()
-    pets = conn.execute("SELECT * FROM pets ORDER BY value DESC").fetchall()
+    pets = conn.execute("""
+        SELECT * FROM pets
+        ORDER BY
+          CASE rarity
+            WHEN 'Limited'   THEN 0
+            WHEN 'Secret'    THEN 1
+            WHEN 'Legendary' THEN 2
+            ELSE 3
+          END,
+          CAST(value AS REAL) DESC,
+          name ASC
+    """).fetchall()
     recent = conn.execute(
         "SELECT * FROM value_history ORDER BY changed_at DESC LIMIT 10"
     ).fetchall()
