@@ -94,7 +94,6 @@ SEED_PETS = [
     ("Ultimate Trophy",   "Limited",   "0", "0",  None),
     ("Dark Guardian",     "Limited",   "0", "0",  None),
     ("Eternal Heart",     "Limited",   "0", "0",  None),
-    ("Crystal Teddy",     "Limited",   "0", "0",  None),
     ("Tophat A",          "Limited",   "0", "0",  None),
     ("Tophat B",          "Limited",   "0", "0",  None),
     ("Tophat C",          "Limited",   "0", "0",  None),
@@ -145,5 +144,28 @@ def seed_db():
             """,
             (name, rarity, value, shiny, note),
         )
+    conn.commit()
+    conn.close()
+
+
+def cleanup_db():
+    """Remove pets that are no longer in the approved SEED_PETS list and fix rarities."""
+    approved = {name for name, *_ in SEED_PETS}
+    conn = get_conn()
+    cur = conn.cursor()
+
+    # Remove unapproved pets
+    all_pets = cur.execute("SELECT id, name FROM pets").fetchall()
+    for pet in all_pets:
+        if pet["name"] not in approved:
+            cur.execute("DELETE FROM pets WHERE id = ?", (pet["id"],))
+
+    # Fix rarities for any pets that changed
+    for name, rarity, *_ in SEED_PETS:
+        cur.execute(
+            "UPDATE pets SET rarity = ? WHERE name = ? AND rarity != ?",
+            (rarity, name, rarity)
+        )
+
     conn.commit()
     conn.close()
