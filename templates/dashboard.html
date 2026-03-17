@@ -221,20 +221,48 @@
                 <div class="inline-value" id="row-{{ pet['id'] }}">
                   <span class="value-display">{{ pet['value'] }}</span>
                   <div class="edit-form" id="edit-{{ pet['id'] }}">
-                    <input type="text" placeholder="Value e.g. 500, N/A, O/C" value="{{ pet['value'] }}" id="val-{{ pet['id'] }}">
-                    <input type="text" placeholder="Shiny e.g. 1000, N/A, O/C" value="{{ pet['shiny_value'] or '' }}" id="shiny-{{ pet['id'] }}">
-                    <input type="text" placeholder="Image URL (optional)" class="reason-input" style="width:200px;" value="{{ pet['image_url'] or '' }}" id="img-{{ pet['id'] }}">
-                    <input type="number" placeholder="Normal exists" style="width:110px;" min="0" value="{{ pet['exists_normal'] or 0 }}" id="enorm-{{ pet['id'] }}">
-                    <input type="number" placeholder="Shiny exists" style="width:110px;" min="0" value="{{ pet['exists_shiny'] or 0 }}" id="eshiny-{{ pet['id'] }}">
-                    <input type="number" placeholder="Demand 0-10" style="width:110px;" min="0" max="10" value="{{ pet['demand'] or 0 }}" id="demand-{{ pet['id'] }}">
-                    <select id="trend-{{ pet['id'] }}" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;padding:5px 10px;border-radius:7px;outline:none;">
-                      <option value="stable" {% if pet['trend'] == 'stable' or not pet['trend'] %}selected{% endif %}>Stable</option>
-                      <option value="up"     {% if pet['trend'] == 'up' %}selected{% endif %}>Rising</option>
-                      <option value="down"   {% if pet['trend'] == 'down' %}selected{% endif %}>Falling</option>
-                    </select>
-                    <input type="text" placeholder="Reason (optional)" class="reason-input" id="reason-{{ pet['id'] }}">
-                    <button class="btn btn-sm btn-save" onclick="saveValue({{ pet['id'] }})">Save</button>
-                    <button class="btn btn-sm btn-cancel" onclick="cancelEdit({{ pet['id'] }})">Cancel</button>
+                    <div style="display:flex;flex-direction:column;gap:8px;padding:10px 0;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Value</span>
+                        <input type="text" placeholder="e.g. 500, N/A, O/C" value="{{ pet['value'] }}" id="val-{{ pet['id'] }}" style="width:140px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Shiny Value</span>
+                        <input type="text" placeholder="e.g. 1000, N/A, O/C" value="{{ pet['shiny_value'] or '' }}" id="shiny-{{ pet['id'] }}" style="width:140px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Image URL</span>
+                        <input type="text" placeholder="https://..." value="{{ pet['image_url'] or '' }}" id="img-{{ pet['id'] }}" style="width:220px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Normal Exists</span>
+                        <input type="number" min="0" value="{{ pet['exists_normal'] or 0 }}" id="enorm-{{ pet['id'] }}" style="width:90px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Shiny Exists</span>
+                        <input type="number" min="0" value="{{ pet['exists_shiny'] or 0 }}" id="eshiny-{{ pet['id'] }}" style="width:90px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Demand (0-10)</span>
+                        <input type="number" min="0" max="10" value="{{ pet['demand'] or 0 }}" id="demand-{{ pet['id'] }}" style="width:90px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Trend</span>
+                        <select id="trend-{{ pet['id'] }}" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;padding:5px 10px;border-radius:7px;outline:none;">
+                          <option value="stable" {% if pet['trend'] == 'stable' or not pet['trend'] %}selected{% endif %}>Stable</option>
+                          <option value="up"     {% if pet['trend'] == 'up' %}selected{% endif %}>Rising</option>
+                          <option value="down"   {% if pet['trend'] == 'down' %}selected{% endif %}>Falling</option>
+                        </select>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Reason</span>
+                        <input type="text" placeholder="Optional" id="reason-{{ pet['id'] }}" style="width:180px;">
+                      </div>
+                      <div style="display:flex;gap:8px;margin-top:4px;">
+                        <button class="btn btn-sm btn-save" onclick="saveValue({{ pet['id'] }})">Save</button>
+                        <button class="btn btn-sm btn-cancel" onclick="cancelEdit({{ pet['id'] }})">Cancel</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </td>

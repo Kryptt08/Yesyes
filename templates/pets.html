@@ -360,7 +360,12 @@
       noRes.style.display = 'none';
       info.textContent = `Showing ${filtered.length} pet${filtered.length !== 1 ? 's' : ''}`;
 
-      grid.innerHTML = filtered.map(p => `
+      grid.innerHTML = filtered.map(p => {
+        const trendHtml = p.trend === 'up'   ? `<span style="color:#34d399;font-size:0.72rem;font-weight:800;">▲ Rising</span>`
+                        : p.trend === 'down' ? `<span style="color:#f87171;font-size:0.72rem;font-weight:800;">▼ Falling</span>`
+                        : `<span style="color:#38bdf8;font-size:0.72rem;font-weight:800;">● Stable</span>`;
+        const demandPct = ((p.demand || 0) / 10) * 100;
+        return `
         <a class="pet-card ${cardRarityClass(p.rarity)}" href="/pet/${p.id}">
           <div class="pet-img-wrap">
             ${p.image_url
@@ -370,13 +375,20 @@
           </div>
           <div class="pet-name">${p.name}</div>
           <span class="rarity-tag ${rarityClass(p.rarity)}">${p.rarity}</span>
-          ${p.note ? `<div style="font-size:0.68rem;color:var(--pink);font-weight:700;margin-bottom:6px;">${p.note}</div>` : ''}
+          ${p.note ? `<div style="font-size:0.68rem;color:var(--pink);font-weight:700;margin-bottom:4px;">${p.note}</div>` : ''}
           <div class="pet-value">${formatValue(p.value)}</div>
           ${p.shiny_value !== null && p.shiny_value !== undefined
             ? `<div class="pet-value-shiny">Shiny: ${formatValue(p.shiny_value)}</div>` : ''}
           <div class="pet-value-label">Trade Value</div>
-        </a>
-      `).join('');
+          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:6px;">
+            ${trendHtml}
+            <span style="color:var(--muted);font-size:0.72rem;font-weight:700;">${p.demand || 0}/10 demand</span>
+          </div>
+          <div style="height:4px;background:var(--surface);border-radius:999px;margin-top:5px;overflow:hidden;">
+            <div style="height:100%;width:${demandPct}%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:999px;"></div>
+          </div>
+        </a>`;
+      }).join('');
     }
 
     function filterPets() { renderPets(); }
