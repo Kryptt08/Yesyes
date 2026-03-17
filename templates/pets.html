@@ -361,7 +361,7 @@
       info.textContent = `Showing ${filtered.length} pet${filtered.length !== 1 ? 's' : ''}`;
 
       grid.innerHTML = filtered.map(p => `
-        <div class="pet-card ${cardRarityClass(p.rarity)}">
+        <a class="pet-card ${cardRarityClass(p.rarity)}" href="/pet/${p.id}">
           <div class="pet-img-wrap">
             ${p.image_url
               ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'pet-img-placeholder ph-${p.rarity.toLowerCase()}\\'>${p.name.split(' ').map(w=>w[0]).join('')}</div>'">`
@@ -375,7 +375,7 @@
           ${p.shiny_value !== null && p.shiny_value !== undefined
             ? `<div class="pet-value-shiny">Shiny: ${formatValue(p.shiny_value)}</div>` : ''}
           <div class="pet-value-label">Trade Value</div>
-        </div>
+        </a>
       `).join('');
     }
 

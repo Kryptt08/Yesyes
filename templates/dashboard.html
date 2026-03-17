@@ -224,6 +224,14 @@
                     <input type="text" placeholder="Value e.g. 500, N/A, O/C" value="{{ pet['value'] }}" id="val-{{ pet['id'] }}">
                     <input type="text" placeholder="Shiny e.g. 1000, N/A, O/C" value="{{ pet['shiny_value'] or '' }}" id="shiny-{{ pet['id'] }}">
                     <input type="text" placeholder="Image URL (optional)" class="reason-input" style="width:200px;" value="{{ pet['image_url'] or '' }}" id="img-{{ pet['id'] }}">
+                    <input type="number" placeholder="Normal exists" style="width:110px;" min="0" value="{{ pet['exists_normal'] or 0 }}" id="enorm-{{ pet['id'] }}">
+                    <input type="number" placeholder="Shiny exists" style="width:110px;" min="0" value="{{ pet['exists_shiny'] or 0 }}" id="eshiny-{{ pet['id'] }}">
+                    <input type="number" placeholder="Demand 0-10" style="width:110px;" min="0" max="10" value="{{ pet['demand'] or 0 }}" id="demand-{{ pet['id'] }}">
+                    <select id="trend-{{ pet['id'] }}" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;padding:5px 10px;border-radius:7px;outline:none;">
+                      <option value="stable" {% if pet['trend'] == 'stable' or not pet['trend'] %}selected{% endif %}>Stable</option>
+                      <option value="up"     {% if pet['trend'] == 'up' %}selected{% endif %}>Rising</option>
+                      <option value="down"   {% if pet['trend'] == 'down' %}selected{% endif %}>Falling</option>
+                    </select>
                     <input type="text" placeholder="Reason (optional)" class="reason-input" id="reason-{{ pet['id'] }}">
                     <button class="btn btn-sm btn-save" onclick="saveValue({{ pet['id'] }})">Save</button>
                     <button class="btn btn-sm btn-cancel" onclick="cancelEdit({{ pet['id'] }})">Cancel</button>
@@ -361,18 +369,26 @@
   }
 
   async function saveValue(id) {
-    const value  = document.getElementById(`val-${id}`).value.trim() || '0';
-    const shiny  = document.getElementById(`shiny-${id}`).value.trim();
-    const imgUrl = document.getElementById(`img-${id}`).value.trim();
-    const reason = document.getElementById(`reason-${id}`).value.trim();
+    const value   = document.getElementById(`val-${id}`).value.trim() || '0';
+    const shiny   = document.getElementById(`shiny-${id}`).value.trim();
+    const imgUrl  = document.getElementById(`img-${id}`).value.trim();
+    const enorm   = parseInt(document.getElementById(`enorm-${id}`).value) || 0;
+    const eshiny  = parseInt(document.getElementById(`eshiny-${id}`).value) || 0;
+    const demand  = parseInt(document.getElementById(`demand-${id}`).value) || 0;
+    const trend   = document.getElementById(`trend-${id}`).value;
+    const reason  = document.getElementById(`reason-${id}`).value.trim();
 
     const res = await fetch(`/admin/pets/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         value,
-        shiny_value: shiny || null,
-        image_url: imgUrl || null,
+        shiny_value:   shiny || null,
+        image_url:     imgUrl || null,
+        exists_normal: enorm,
+        exists_shiny:  eshiny,
+        demand,
+        trend,
         reason: reason || null,
       }),
     });

@@ -53,12 +53,20 @@ def init_db():
 
     conn.commit()
 
-    # Safe migration: add image_url if column doesn't exist
-    try:
-        conn.execute("ALTER TABLE pets ADD COLUMN image_url TEXT")
-        conn.commit()
-    except Exception:
-        pass  # Column already exists
+    # Safe migrations for new columns
+    new_columns = [
+        ("ALTER TABLE pets ADD COLUMN image_url TEXT", "image_url"),
+        ("ALTER TABLE pets ADD COLUMN exists_normal INTEGER DEFAULT 0", "exists_normal"),
+        ("ALTER TABLE pets ADD COLUMN exists_shiny INTEGER DEFAULT 0", "exists_shiny"),
+        ("ALTER TABLE pets ADD COLUMN demand INTEGER DEFAULT 0", "demand"),
+        ("ALTER TABLE pets ADD COLUMN trend TEXT DEFAULT 'stable'", "trend"),
+    ]
+    for sql, _ in new_columns:
+        try:
+            conn.execute(sql)
+            conn.commit()
+        except Exception:
+            pass  # Column already exists
 
     conn.close()
 
