@@ -227,6 +227,32 @@
     return 'None';
   }
 
+  function switchMode(mode) {
+    const valDisplay    = document.getElementById('val-display');
+    const existsDisplay = document.getElementById('exists-display');
+    const btnNormal     = document.getElementById('btn-normal');
+    const btnShiny      = document.getElementById('btn-shiny');
+    if (!valDisplay) return;
+
+    if (mode === 'shiny') {
+      valDisplay.textContent    = window._petShiny;
+      valDisplay.style.color    = 'var(--blue)';
+      existsDisplay.textContent = window._existsShiny;
+      btnShiny.style.background = 'linear-gradient(135deg,#38bdf8,#a855f7)';
+      btnShiny.style.color      = '#fff';
+      btnNormal.style.background = 'transparent';
+      btnNormal.style.color      = 'var(--muted)';
+    } else {
+      valDisplay.textContent    = window._petNormal;
+      valDisplay.style.color    = 'var(--yellow)';
+      existsDisplay.textContent = window._existsNormal;
+      btnNormal.style.background = 'linear-gradient(135deg,var(--pink),var(--purple))';
+      btnNormal.style.color      = '#fff';
+      btnShiny.style.background  = 'transparent';
+      btnShiny.style.color       = 'var(--muted)';
+    }
+  }
+
   async function load() {
     try {
       const [petRes, histRes] = await Promise.all([
@@ -251,14 +277,27 @@
             <div class="pet-hero-name">${pet.name}</div>
             <span class="rarity-tag ${rarityClass(pet.rarity)}">${pet.rarity}</span>
             ${pet.note ? `<div style="font-size:0.8rem;color:var(--pink);font-weight:700;margin-bottom:12px;">${pet.note}</div>` : ''}
+
+            <!-- NORMAL / SHINY TOGGLE -->
+            <div style="display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;width:fit-content;margin-bottom:16px;">
+              <button id="btn-normal" onclick="switchMode('normal')"
+                style="padding:7px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;border:none;cursor:pointer;transition:all 0.2s;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;">
+                Normal
+              </button>
+              <button id="btn-shiny" onclick="switchMode('shiny')"
+                style="padding:7px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;border:none;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--muted);">
+                ✨ Shiny
+              </button>
+            </div>
+
             <div class="pet-stats-row">
               <div class="pet-stat">
-                <div class="pet-stat-label">Value</div>
-                <div class="pet-stat-value ${formatValue(pet.value) === 'N/A' || formatValue(pet.value) === 'O/C' ? 'na' : ''}">${formatValue(pet.value)}</div>
+                <div class="pet-stat-label" id="val-label">Value</div>
+                <div class="pet-stat-value" id="val-display">${formatValue(pet.value)}</div>
               </div>
               <div class="pet-stat">
-                <div class="pet-stat-label">Shiny Value</div>
-                <div class="pet-stat-value shiny ${!pet.shiny_value ? 'na' : ''}">${pet.shiny_value ? formatValue(pet.shiny_value) : 'N/A'}</div>
+                <div class="pet-stat-label" id="exists-label">Exists</div>
+                <div class="pet-stat-value exists" id="exists-display">${pet.exists_normal || 0}</div>
               </div>
               <div class="pet-stat">
                 <div class="pet-stat-label">Trend</div>
@@ -276,7 +315,6 @@
         </div>
 
         <div class="detail-grid">
-          <!-- CHART -->
           <div class="panel" style="grid-column: 1 / -1;">
             <div class="panel-title"><div class="dot"></div>Value History</div>
             ${history.length > 1
@@ -284,8 +322,6 @@
               : `<div style="color:var(--muted);font-size:0.875rem;">Not enough data yet to show a chart.</div>`
             }
           </div>
-
-          <!-- EXISTS -->
           <div class="panel">
             <div class="panel-title"><div class="dot"></div>Existence Count</div>
             <div class="exists-row">
@@ -299,8 +335,6 @@
               </div>
             </div>
           </div>
-
-          <!-- HISTORY LIST -->
           <div class="panel">
             <div class="panel-title"><div class="dot"></div>Recent Changes</div>
             ${history.length === 0
@@ -321,6 +355,12 @@
           </div>
         </div>
       `;
+
+      // Store values for toggle
+      window._petNormal = formatValue(pet.value);
+      window._petShiny  = pet.shiny_value ? formatValue(pet.shiny_value) : 'N/A';
+      window._existsNormal = pet.exists_normal || 0;
+      window._existsShiny  = pet.exists_shiny  || 0;
 
       // Draw chart if enough data
       if (history.length > 1) {

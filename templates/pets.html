@@ -144,15 +144,15 @@
       position: relative; z-index: 1;
       max-width: 1100px; margin: 0 auto; padding: 0 24px 80px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
       gap: 14px;
     }
 
     .pet-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 18px 14px; text-align: center;
+      border-radius: 16px; overflow: hidden;
       transition: all 0.22s; cursor: pointer; text-decoration: none; color: var(--text);
-      display: block; animation: fadeIn 0.3s ease;
+      display: block; animation: fadeIn 0.3s ease; position: relative;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .pet-card:hover {
@@ -164,42 +164,70 @@
     .pet-card.r-legendary-card:hover { border-color: var(--yellow); box-shadow: 0 8px 32px rgba(251,191,36,0.2); }
     .pet-card.r-limited-card:hover  { border-color: var(--pink); box-shadow: 0 8px 32px rgba(255,79,163,0.2); }
 
+    /* IMAGE AREA - full width top */
     .pet-img-wrap {
-      width: 80px; height: 80px; margin: 0 auto 12px;
-      border-radius: 14px; overflow: hidden; position: relative;
-      background: transparent; border: 1px solid var(--border);
+      width: 100%; height: 130px;
+      background: var(--surface);
       display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
     }
-    .pet-img-wrap img {
-      width: 100%; height: 100%; object-fit: contain;
-      mix-blend-mode: screen;
-    }
+    .pet-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .pet-img-placeholder {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.6rem; font-weight: 800; color: var(--muted);
+      font-size: 1.8rem; font-weight: 800; color: var(--border);
       text-transform: uppercase; letter-spacing: 0.08em;
-      text-align: center; padding: 6px;
     }
-    .pet-img-placeholder.ph-limited  { background: linear-gradient(135deg, rgba(255,79,163,0.15), rgba(168,85,247,0.15)); }
-    .pet-img-placeholder.ph-secret   { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(251,113,133,0.1)); }
-    .pet-img-placeholder.ph-legendary{ background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1)); }
-    .pet-img-placeholder.ph-rare     { background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(14,165,233,0.1)); }
+    .pet-img-placeholder.ph-limited  { background: linear-gradient(135deg, rgba(255,79,163,0.12), rgba(168,85,247,0.12)); }
+    .pet-img-placeholder.ph-secret   { background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(251,113,133,0.08)); }
+    .pet-img-placeholder.ph-legendary{ background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(245,158,11,0.08)); }
+    .pet-img-placeholder.ph-rare     { background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(14,165,233,0.08)); }
 
-    .pet-emoji { font-size: 42px; display: block; margin-bottom: 10px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); }
-    .pet-name  { font-weight: 800; font-size: 0.875rem; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* CARD BODY */
+    .pet-card-body { padding: 10px 12px 12px; }
+    .pet-name  { font-weight: 800; font-size: 0.9rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* DEMAND + TREND ROW */
+    .pet-meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .demand-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      border-radius: 6px; padding: 2px 8px;
+      font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .demand-none   { background: rgba(139,128,176,0.15); color: var(--muted); border: 1px solid rgba(139,128,176,0.2); }
+    .demand-low    { background: rgba(56,189,248,0.12);  color: var(--blue);  border: 1px solid rgba(56,189,248,0.25); }
+    .demand-med    { background: rgba(251,191,36,0.15);  color: var(--yellow);border: 1px solid rgba(251,191,36,0.3); }
+    .demand-high   { background: rgba(52,211,153,0.15);  color: #34d399;      border: 1px solid rgba(52,211,153,0.3); }
+    .demand-extreme{ background: rgba(255,79,163,0.15);  color: var(--pink);  border: 1px solid rgba(255,79,163,0.3); }
+
+    .trend-pill {
+      font-size: 0.68rem; font-weight: 800;
+    }
+    .trend-up     { color: #34d399; }
+    .trend-down   { color: #f87171; }
+    .trend-stable { color: var(--blue); }
+
     .rarity-tag {
       display: inline-block; border-radius: 6px; padding: 2px 9px;
-      font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
     }
     .r-secret    { background: rgba(239,68,68,0.2);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
     .r-legendary { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
     .r-limited   { background: rgba(255,79,163,0.15); color: var(--pink); border: 1px solid rgba(255,79,163,0.3); }
     .r-rare      { background: rgba(56,189,248,0.12); color: var(--blue); border: 1px solid rgba(56,189,248,0.25); }
 
-    .pet-value       { font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 700; color: var(--yellow); }
-    .pet-value-shiny { font-size: 0.8rem; color: var(--blue); font-weight: 700; margin-top: 3px; }
-    .pet-value-label { color: var(--muted); font-size: 0.68rem; font-weight: 600; }
+    .pet-value       { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; color: var(--yellow); line-height: 1; margin: 4px 0; }
+    .pet-value-shiny { font-size: 0.78rem; color: var(--blue); font-weight: 700; }
+    .pet-value-label { color: var(--muted); font-size: 0.65rem; font-weight: 600; }
+
+    /* CARD FOOTER */
+    .pet-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+      font-size: 0.68rem; color: var(--muted); font-weight: 600;
+    }
+    .exists-tag { display: flex; align-items: center; gap: 4px; }
+
 
     .shiny-badge {
       display: inline-flex; align-items: center; gap: 4px;
@@ -361,31 +389,48 @@
       info.textContent = `Showing ${filtered.length} pet${filtered.length !== 1 ? 's' : ''}`;
 
       grid.innerHTML = filtered.map(p => {
-        const trendHtml = p.trend === 'up'   ? `<span style="color:#34d399;font-size:0.72rem;font-weight:800;">▲ Rising</span>`
-                        : p.trend === 'down' ? `<span style="color:#f87171;font-size:0.72rem;font-weight:800;">▼ Falling</span>`
-                        : `<span style="color:#38bdf8;font-size:0.72rem;font-weight:800;">● Stable</span>`;
-        const demandPct = ((p.demand || 0) / 10) * 100;
+        const demand = p.demand || 0;
+        const demandClass = demand >= 9 ? 'demand-extreme'
+                          : demand >= 7 ? 'demand-high'
+                          : demand >= 4 ? 'demand-med'
+                          : demand >= 1 ? 'demand-low'
+                          : 'demand-none';
+        const demandLabel = demand >= 9 ? '🔥 Extreme'
+                          : demand >= 7 ? '↑ High'
+                          : demand >= 4 ? '~ Med'
+                          : demand >= 1 ? '↓ Low'
+                          : 'None';
+        const trendHtml = p.trend === 'up'   ? `<span class="trend-pill trend-up">▲ Rising</span>`
+                        : p.trend === 'down' ? `<span class="trend-pill trend-down">▼ Falling</span>`
+                        : `<span class="trend-pill trend-stable">● Stable</span>`;
+        const imgHtml = p.image_url
+          ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'pet-img-placeholder ph-${p.rarity.toLowerCase()}\\'>${p.name.split(' ').map(w=>w[0]).join('')}</div>'">`
+          : `<div class="pet-img-placeholder ph-${p.rarity.toLowerCase()}">${p.name.split(' ').map(w=>w[0]).join('')}</div>`;
+        const timeAgo = (() => {
+          const d = new Date(p.updated_at + 'Z');
+          const diff = Math.floor((Date.now() - d) / 60000);
+          if (diff < 1) return 'just now';
+          if (diff < 60) return diff + 'm ago';
+          if (diff < 1440) return Math.floor(diff/60) + 'h ago';
+          return Math.floor(diff/1440) + 'd ago';
+        })();
         return `
         <a class="pet-card ${cardRarityClass(p.rarity)}" href="/pet/${p.id}">
-          <div class="pet-img-wrap">
-            ${p.image_url
-              ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'pet-img-placeholder ph-${p.rarity.toLowerCase()}\\'>${p.name.split(' ').map(w=>w[0]).join('')}</div>'">`
-              : `<div class="pet-img-placeholder ph-${p.rarity.toLowerCase()}">${p.name.split(' ').map(w => w[0]).join('')}</div>`
-            }
-          </div>
-          <div class="pet-name">${p.name}</div>
-          <span class="rarity-tag ${rarityClass(p.rarity)}">${p.rarity}</span>
-          ${p.note ? `<div style="font-size:0.68rem;color:var(--pink);font-weight:700;margin-bottom:4px;">${p.note}</div>` : ''}
-          <div class="pet-value">${formatValue(p.value)}</div>
-          ${p.shiny_value !== null && p.shiny_value !== undefined
-            ? `<div class="pet-value-shiny">Shiny: ${formatValue(p.shiny_value)}</div>` : ''}
-          <div class="pet-value-label">Trade Value</div>
-          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:6px;">
-            ${trendHtml}
-            <span style="color:var(--muted);font-size:0.72rem;font-weight:700;">${p.demand || 0}/10 demand</span>
-          </div>
-          <div style="height:4px;background:var(--surface);border-radius:999px;margin-top:5px;overflow:hidden;">
-            <div style="height:100%;width:${demandPct}%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:999px;"></div>
+          <div class="pet-img-wrap">${imgHtml}</div>
+          <div class="pet-card-body">
+            <div class="pet-name">${p.name}</div>
+            <div class="pet-meta-row">
+              <span class="demand-badge ${demandClass}">${demandLabel}</span>
+              ${trendHtml}
+            </div>
+            <span class="rarity-tag ${rarityClass(p.rarity)}">${p.rarity}</span>
+            ${p.note ? `<div style="font-size:0.65rem;color:var(--pink);font-weight:700;margin-bottom:4px;">${p.note}</div>` : ''}
+            <div class="pet-value">${formatValue(p.value)}</div>
+            ${p.shiny_value ? `<div class="pet-value-shiny">✨ Shiny: ${formatValue(p.shiny_value)}</div>` : ''}
+            <div class="pet-card-footer">
+              <span class="exists-tag">👤 ${p.exists_normal || 0} exist</span>
+              <span>${timeAgo}</span>
+            </div>
           </div>
         </a>`;
       }).join('');
