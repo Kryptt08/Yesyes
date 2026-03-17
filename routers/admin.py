@@ -103,10 +103,10 @@ async def add_pet(pet: PetCreate, user: str = Depends(require_admin)):
     try:
         conn.execute(
             """
-            INSERT INTO pets (name, rarity, value, shiny_value, image_url, note, exists_normal, exists_shiny, demand, trend)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO pets (name, rarity, value, shiny_value, image_url, shiny_image_url, note, exists_normal, exists_shiny, demand, trend)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (pet.name, pet.rarity, pet.value, pet.shiny_value, pet.image_url, pet.note, pet.exists_normal, pet.exists_shiny, pet.demand, pet.trend),
+            (pet.name, pet.rarity, pet.value, pet.shiny_value, pet.image_url, pet.shiny_image_url, pet.note, pet.exists_normal, pet.exists_shiny, pet.demand, pet.trend),
         )
         conn.commit()
     except Exception as e:
@@ -155,12 +155,12 @@ async def update_pet_value(
     conn.execute(
         """
         UPDATE pets
-        SET value = ?, shiny_value = ?, image_url = ?, note = ?,
+        SET value = ?, shiny_value = ?, image_url = ?, shiny_image_url = ?, note = ?,
             exists_normal = ?, exists_shiny = ?, demand = ?, trend = ?,
             updated_at = datetime('now')
         WHERE id = ?
         """,
-        (update.value, update.shiny_value, update.image_url, update.note,
+        (update.value, update.shiny_value, update.image_url, update.shiny_image_url, update.note,
          update.exists_normal, update.exists_shiny, update.demand, update.trend, pet_id),
     )
     conn.commit()

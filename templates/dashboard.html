@@ -235,6 +235,10 @@
                         <input type="text" placeholder="https://..." value="{{ pet['image_url'] or '' }}" id="img-{{ pet['id'] }}" style="width:220px;">
                       </div>
                       <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Shiny Image</span>
+                        <input type="text" placeholder="https://..." value="{{ pet['shiny_image_url'] or '' }}" id="simg-{{ pet['id'] }}" style="width:220px;">
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;">
                         <span style="color:var(--muted);font-size:0.72rem;font-weight:700;text-transform:uppercase;width:90px;">Normal Exists</span>
                         <input type="number" min="0" value="{{ pet['exists_normal'] or 0 }}" id="enorm-{{ pet['id'] }}" style="width:90px;">
                       </div>
@@ -357,6 +361,10 @@
       <label>Image URL (optional)</label>
       <input type="text" id="newImg" placeholder="https://static.wikia.nocookie.net/...">
     </div>
+    <div class="form-group">
+      <label>Shiny Image URL (optional)</label>
+      <input type="text" id="newSImg" placeholder="https://static.wikia.nocookie.net/...">
+    </div>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeAddModal()">Cancel</button>
       <button class="btn btn-primary" onclick="addPet()">Add Pet</button>
@@ -421,6 +429,7 @@
     const value   = document.getElementById(`val-${id}`).value.trim() || '0';
     const shiny   = document.getElementById(`shiny-${id}`).value.trim();
     const imgUrl  = document.getElementById(`img-${id}`).value.trim();
+    const sImgUrl = document.getElementById(`simg-${id}`).value.trim();
     const enorm   = parseInt(document.getElementById(`enorm-${id}`).value) || 0;
     const eshiny  = parseInt(document.getElementById(`eshiny-${id}`).value) || 0;
     const demand  = parseInt(document.getElementById(`demand-${id}`).value) || 0;
@@ -432,10 +441,11 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         value,
-        shiny_value:   shiny || null,
-        image_url:     imgUrl || null,
-        exists_normal: enorm,
-        exists_shiny:  eshiny,
+        shiny_value:      shiny || null,
+        image_url:        imgUrl || null,
+        shiny_image_url:  sImgUrl || null,
+        exists_normal:    enorm,
+        exists_shiny:     eshiny,
         demand,
         trend,
         reason: reason || null,
@@ -471,7 +481,8 @@
       rarity:      document.getElementById('newRarity').value,
       value:       document.getElementById('newValue').value.trim() || '0',
       shiny_value: document.getElementById('newShiny').value.trim() || null,
-      image_url:   document.getElementById('newImg').value.trim() || null,
+      image_url:        document.getElementById('newImg').value.trim() || null,
+      shiny_image_url:  document.getElementById('newSImg').value.trim() || null,
       note:        document.getElementById('newNote').value.trim() || null,
     };
     if (!body.name) { showToast('Name is required', 'error'); return; }

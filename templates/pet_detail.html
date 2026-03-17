@@ -230,26 +230,33 @@
   function switchMode(mode) {
     const valDisplay    = document.getElementById('val-display');
     const existsDisplay = document.getElementById('exists-display');
+    const petImg        = document.getElementById('pet-main-img');
     const btnNormal     = document.getElementById('btn-normal');
     const btnShiny      = document.getElementById('btn-shiny');
     if (!valDisplay) return;
 
     if (mode === 'shiny') {
-      valDisplay.textContent    = window._petShiny;
-      valDisplay.style.color    = 'var(--blue)';
-      existsDisplay.textContent = window._existsShiny;
-      btnShiny.style.background = 'linear-gradient(135deg,#38bdf8,#a855f7)';
-      btnShiny.style.color      = '#fff';
+      valDisplay.textContent     = window._petShiny;
+      valDisplay.style.color     = 'var(--blue)';
+      existsDisplay.textContent  = window._existsShiny;
+      btnShiny.style.background  = 'linear-gradient(135deg,#38bdf8,#a855f7)';
+      btnShiny.style.color       = '#fff';
       btnNormal.style.background = 'transparent';
       btnNormal.style.color      = 'var(--muted)';
+      if (petImg && window._shinyImg) {
+        petImg.src = window._shinyImg;
+      }
     } else {
-      valDisplay.textContent    = window._petNormal;
-      valDisplay.style.color    = 'var(--yellow)';
-      existsDisplay.textContent = window._existsNormal;
+      valDisplay.textContent     = window._petNormal;
+      valDisplay.style.color     = 'var(--yellow)';
+      existsDisplay.textContent  = window._existsNormal;
       btnNormal.style.background = 'linear-gradient(135deg,var(--pink),var(--purple))';
       btnNormal.style.color      = '#fff';
       btnShiny.style.background  = 'transparent';
       btnShiny.style.color       = 'var(--muted)';
+      if (petImg && window._normalImg) {
+        petImg.src = window._normalImg;
+      }
     }
   }
 
@@ -267,7 +274,7 @@
       const demand     = pet.demand || 0;
       const demandPct  = (demand / 10) * 100;
       const imgHtml    = pet.image_url
-        ? `<img src="${pet.image_url}" alt="${pet.name}">`
+        ? `<img id="pet-main-img" src="${pet.image_url}" alt="${pet.name}">`
         : `<div class="placeholder">${pet.name.split(' ').map(w=>w[0]).join('')}</div>`;
 
       document.getElementById('content').innerHTML = `
@@ -357,10 +364,12 @@
       `;
 
       // Store values for toggle
-      window._petNormal = formatValue(pet.value);
-      window._petShiny  = pet.shiny_value ? formatValue(pet.shiny_value) : 'N/A';
+      window._petNormal    = formatValue(pet.value);
+      window._petShiny     = pet.shiny_value ? formatValue(pet.shiny_value) : 'N/A';
       window._existsNormal = pet.exists_normal || 0;
       window._existsShiny  = pet.exists_shiny  || 0;
+      window._normalImg    = pet.image_url || null;
+      window._shinyImg     = pet.shiny_image_url || pet.image_url || null;
 
       // Draw chart if enough data
       if (history.length > 1) {

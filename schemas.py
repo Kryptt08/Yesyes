@@ -9,6 +9,7 @@ class PetOut(BaseModel):
     value: str
     shiny_value: Optional[str]
     image_url: Optional[str]
+    shiny_image_url: Optional[str]
     note: Optional[str]
     exists_normal: Optional[int]
     exists_shiny: Optional[int]
@@ -23,6 +24,7 @@ class PetCreate(BaseModel):
     value: str = "0"
     shiny_value: Optional[str] = None
     image_url: Optional[str] = None
+    shiny_image_url: Optional[str] = None
     note: Optional[str] = None
     exists_normal: Optional[int] = 0
     exists_shiny: Optional[int] = 0
@@ -34,6 +36,7 @@ class PetUpdate(BaseModel):
     value: str
     shiny_value: Optional[str] = None
     image_url: Optional[str] = None
+    shiny_image_url: Optional[str] = None
     note: Optional[str] = None
     reason: Optional[str] = None
     exists_normal: Optional[int] = 0
